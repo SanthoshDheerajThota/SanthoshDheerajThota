@@ -199,7 +199,7 @@ module comparator(l,e,g,a,b);
 endmodule
 
 
-
+//this is mealy machine
 
 module detetctor(y,clock,in,reset);
   input clock,in,reset;
@@ -243,6 +243,56 @@ module detetctor(y,clock,in,reset);
     end
 endmodule
   
+
+//this is moore machine
+module detector2(y,clock,in,reset);
+  input clock,in,reset;
+  output reg y;
+  parameter a=0;
+  parameter b=1;
+  parameter c=2;
+  parameter d=3;
+  parameter e=4;
+  reg [2:0] ps,ns;
+  always @(posedge clock or posedge reset)
+    begin
+      if(reset==1)
+        begin
+        y=0; ps<=a;
+        end
+      else
+        begin
+          ps<=ns;
+        end
+    end
+  always @(ps or in)
+    begin
+      case(ps)
+        a:begin
+           ns=in?b:a;
+          end
+        b:begin
+          ns=in?b:c;
+          end
+        c:begin
+          ns=in?d:a;
+          end
+        d:begin
+          ns=in?d:e;
+          end
+        e:begin
+          ns=in?b:a;
+          end
+      endcase
+    end
+  always @(ps)
+    begin
+      if(ps==a||ps==b||ps==c||ps==d)
+        y=0;
+      else if(ps==e)
+        y=1;
+    end
+endmodule
 
 module test;
   reg in,clock,reset;
